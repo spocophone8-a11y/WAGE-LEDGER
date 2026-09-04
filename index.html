@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Wage Ledger — Labourer Records</title>
+<link rel="stylesheet" href="style.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="title-block">
+      <h1>Wage Ledger</h1>
+      <p>Muster roll — labourer wage &amp; debt record</p>
+    </div>
+  </header>
+
+  <!-- File System Access API gate: shown until a local file is connected -->
+  <div class="gate" id="gate">
+    <p id="gateText">Connect this page to a workbook on your computer — every labourer, entry, and payment you record here writes straight back to that file, no downloading.</p>
+    <div class="actions">
+      <button id="connectBtn">Connect existing wage_ledger.xlsx</button>
+      <button id="newBtn">Start a new wage_ledger.xlsx</button>
+    </div>
+  </div>
+
+  <div class="toolbar hidden" id="toolbarConnected">
+    <div class="conn-badge"><span class="conn-dot live" id="connDot"></span><span id="connLabel">—</span></div>
+    <button id="switchBtn">Switch file</button>
+  </div>
+
+  <!-- Fallback toolbar for browsers without the File System Access API -->
+  <div class="toolbar hidden" id="toolbarFallback">
+    <label class="file-btn" for="fileInput">Load wage_ledger.xlsx</label>
+    <input type="file" id="fileInput" accept=".xlsx" />
+    <button id="downloadBtn">Download wage_ledger.xlsx</button>
+  </div>
+
+  <p class="status-line" id="statusMsg"></p>
+
+  <!-- Add labourer -->
+  <section class="panel" id="addLabourerPanel">
+    <h2>Add a labourer</h2>
+    <div class="form-grid">
+      <input type="text" id="newName" placeholder="Full name" disabled />
+      <input type="tel" id="newMobile" placeholder="Mobile number" disabled />
+      <input type="text" id="newNotes" placeholder="Notes (village, role, rate…) — optional" disabled />
+      <button id="addLabourerBtn" disabled>+ Add labourer</button>
+    </div>
+  </section>
+
+  <!-- Grand totals across every labourer -->
+  <section class="panel totals-panel hidden" id="totalsPanel">
+    <h2>Ledger totals — all labourers</h2>
+    <div class="stat-strip totals-strip">
+      <div class="stat"><span class="label">Labourers</span><span class="val" id="totLabourers">0</span></div>
+      <div class="stat paid"><span class="label">Total Wage</span><span class="val" id="totWage">₹0</span></div>
+      <div class="stat paid"><span class="label">Total Paid</span><span class="val" id="totPaid">₹0</span></div>
+      <div class="stat due"><span class="label">Total Due</span><span class="val" id="totDue">₹0</span></div>
+      <div class="stat debt"><span class="label">Net Debt</span><span class="val" id="totDebt">₹0</span></div>
+    </div>
+  </section>
+
+  <!-- Labourer cards -->
+  <div class="search-row">
+    <input type="search" id="searchBox" placeholder="Search labourer by name or mobile number…" disabled />
+  </div>
+  <section id="labourerList"></section>
+
+  <footer class="note" id="footerNote"></footer>
+
+</div>
+
+<!-- Entry-row template used by script.js -->
+<template id="entryRowTemplate">
+  <div class="entry-row">
+    <span class="e-date"></span>
+    <span class="e-work"></span>
+    <span class="e-wage"></span>
+    <span class="e-paid"></span>
+    <span class="e-due"></span>
+    <span class="e-debt"></span>
+    <button class="e-del del-btn" title="Remove this entry">×</button>
+  </div>
+</template>
+
+<script src="script.js"></script>
+</body>
+</html>
